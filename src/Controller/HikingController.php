@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Hiking;
 use App\Form\HikingType;
 use App\Repository\HikingRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +19,39 @@ class HikingController extends AbstractController
     /**
      * @Route("/", name="hiking_index", methods={"GET"})
      */
-    public function index(HikingRepository $hikingRepository): Response
+    public function index(Request $request, HikingRepository $hikingRepository, PaginatorInterface $paginator): Response
     {
+
+        $rando = $hikingRepository->findAll();
+        $rando = $paginator->paginate(
+            $rando,
+            $request->query->getInt('page', 1), 5
+        );
         return $this->render('hiking/index.html.twig', [
-            'hikings' => $hikingRepository->findAll(),
+//            'hikings' => $hikingRepository->findAll(),
+            'hikings' => $rando,
+
         ]);
     }
+
+
+    // App\Controller\ArticleController.php
+
+    public function listAction(EntityManagerInterface $em, PaginatorInterface $paginator, Request $request)
+    {
+        $dql   = "SELECT a FROM AcmeMainBundle:Article a";
+        $query = $em->createQuery($dql);
+
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
+        // parameters to template
+        return $this->render('article/list.html.twig', ['pagination' => $pagination]);
+    }
+
 
     /**
      * @Route("/new", name="hiking_new", methods={"GET","POST"})
@@ -83,7 +111,7 @@ class HikingController extends AbstractController
      */
     public function delete(Request $request, Hiking $hiking): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$hiking->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $hiking->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($hiking);
             $entityManager->flush();

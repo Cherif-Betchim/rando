@@ -21,6 +21,7 @@
                 <th>Image</th>
                 <th>Titre</th>
                 <th>Temps</th>
+                <th>Type</th>
                 <th>Distance</th>
                 <th>Elévation</th>
                 <th>Difficulty</th>
@@ -32,12 +33,14 @@
         <tbody>
         {% for hiking in hikings %}
             <tr>
-                <td><img src="nothing"></td>
+                <td><img src="{{ hiking.image }} width="70px" height="70px""></td>
                 <td>{{ hiking.title }}</td>
-                <td>{{ hiking.time }}</td>
+                <td>{{ hiking.time }} Minutes</td>
+                <td>{{ hiking.type }}</td>
+
                 <td>{{ hiking.distance }}</td>
                 <td>{{ hiking.elevation }}</td>
-                <td>{{ hiking.type }}</td>
+                <td>{{ hiking.Difficulty }}</td>
                 <td>{{ hiking.town }}</td>
                 <td>{{ hiking.returnPoint }}</td>
 
@@ -52,7 +55,9 @@
             </tr>
         {% endfor %}
         </tbody>
+
     </table>
+    {{ knp_pagination_render(hikings) }}
 
     <a href="{{ path('hiking_new') }}">Create new</a>
 {% endblock %}
