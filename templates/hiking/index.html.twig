@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hiking index{% endblock %}
+
+
+{% block body %}
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">welcome to Hiking with passion</h1>
+            <p class="lead">Le lorem ipsum est, en imprimerie, une suite de mots sans signification utilisée à titre
+                provisoire pour
+                calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou
+                que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou
+                Lipsum.</p>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Titre</th>
+                <th>Temps</th>
+                <th>Distance</th>
+                <th>Elévation</th>
+                <th>Difficulty</th>
+                <th>Region</th>
+                <th>point de retour</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for hiking in hikings %}
+            <tr>
+                <td><img src="nothing"></td>
+                <td>{{ hiking.title }}</td>
+                <td>{{ hiking.time }}</td>
+                <td>{{ hiking.distance }}</td>
+                <td>{{ hiking.elevation }}</td>
+                <td>{{ hiking.type }}</td>
+                <td>{{ hiking.town }}</td>
+                <td>{{ hiking.returnPoint }}</td>
+
+                <td>
+                    <a href="{{ path('hiking_show', {'id': hiking.id}) }}">show</a>
+                    <a href="{{ path('hiking_edit', {'id': hiking.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="18">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('hiking_new') }}">Create new</a>
+{% endblock %}
